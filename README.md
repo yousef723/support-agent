@@ -10,12 +10,14 @@ All data is fake.
 
 ## Results
 
-- Handled **30 of 30** test messages correctly
+- Handled **39 of 40** test messages correctly (30 standard cases and 10 harder ones)
 - Model: gpt-4o-mini
-- Total cost for the 30 messages: **$0.0065**
-- Average time per message: **3.2 s**
-- Note: I wrote the 30 test messages together with the agent's rules, so this is an easy test set. Harder tests are the next step.
-
+- Total cost for the 40 messages: **$0.0092**
+- Average time per message: **4.2 s**
+- First run on all 40 gave 38 of 40. The two failures showed real weaknesses (strict order-number matching and a missed safety rule). I fixed both and ran again.
+- One known miss: for "Is ORD-1005 still coming?" the agent asked for an order number that was already in the message.
+- Results vary slightly between runs because the model is not fully deterministic. The fixes were made after seeing the failures, so the final score is closer to a regression check than a fresh test.
+- I wrote the test messages together with the agent's rules, so a high score does not mean it would handle every real customer message.
 ## How it works
 
 1. `POST /v1/messages` with an `X-API-Key` header. The key identifies the business.
@@ -65,16 +67,16 @@ pytest -v
 ```
 
 - `tests/test_api.py`: fast tests with no AI (API keys, business isolation, refund rules, step limit).
-- `tests/test_agent_cases.py`: 30 customer messages sent to the real model. Each one checks the final outcome and which tools were used or not used.
+- `tests/test_agent_cases.py`: 40 customer messages sent to the real model. Each one checks the final outcome and which tools were used or not used.
 
-GitHub Actions runs the fast tests on every push against a real PostgreSQL database. The 30 real-model messages cost a little money, so they run by hand: Actions, then CI, then Run workflow (needs an `OPENAI_API_KEY` repository secret).
+GitHub Actions runs the fast tests on every push against a real PostgreSQL database. The 40 real-model messages cost a little money, so they run by hand: Actions, then CI, then Run workflow (needs an `OPENAI_API_KEY` repository secret).
 
 ## Live demo
 
-URL: _add your link here_
+URL: 
 
 ## Limits (on purpose)
 
 - Fake orders only, in code. No real payments or refunds: the agent creates a ticket for a human.
 - A new database connection is opened for each query. That is fine for a demo; a busy deployment would use a connection pool.
-- The 30 test messages were written by me together with the agent's rules, so a score of 30 of 30 does not mean it would handle every real customer message.
+- The test messages were written by me together with the agent's rules, so a high score does not mean it would handle every real customer message.
