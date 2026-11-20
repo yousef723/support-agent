@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent traces</title>
+<style>
+:root{--bg:#f4f6f8;--panel:#fff;--ink:#16212b;--muted:#5d6b78;--line:#d9e0e6;--model:#2f5d9e;--tool:#9a5b00;--err:#b3261e;--ok:#1d7a4d}
+@media (prefers-color-scheme:dark){:root{--bg:#10161c;--panel:#18212a;--ink:#e6ecf1;--muted:#93a2b0;--line:#2b3844;--model:#7fa8e6;--tool:#e0a54a;--err:#f2867f;--ok:#6cc79a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",system-ui,sans-serif}
+main{max-width:900px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.4rem;margin:0 0 16px}
+h2{font-size:1.1rem;margin:24px 0 8px}
+.bar{display:flex;gap:8px;margin-bottom:12px}
+input{flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);font:inherit}
+button{padding:8px 14px;border:0;border-radius:6px;background:var(--model);color:#fff;font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--model);outline-offset:2px}
+a{color:var(--model)}
+.msg{color:var(--err);min-height:1.4em}
+table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line)}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.85rem}
+.wrap{overflow-x:auto}
+.badge{display:inline-block;padding:1px 8px;border-radius:10px;border:1px solid currentColor;font-size:.8rem}
+.resolved,.model{color:var(--ok)}.ticket_created{color:var(--model)}.handed_off,.error{color:var(--err)}.tool{color:var(--tool)}
+.model{color:var(--model)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:8px 0}
+.facts{display:flex;flex-wrap:wrap;gap:6px 24px;color:var(--muted)}
+.step{border-left:4px solid currentColor;background:var(--panel);border-radius:0 8px 8px 0;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 14px;margin:10px 0}
+.step .head{display:flex;justify-content:space-between;gap:12px;font-weight:600}
+.step .meta{color:var(--muted);font-weight:400;font-size:.85rem}
+pre{margin:6px 0 0;padding:8px;background:var(--bg);border-radius:6px;white-space:pre-wrap;word-break:break-word;font:13px/1.4 Consolas,monospace;color:var(--ink)}
+.lbl{color:var(--muted);font-size:.85rem;margin-top:6px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Agent traces</h1>
+  <div class="bar">
+    <input id="key" type="password" placeholder="Paste your API key" aria-label="API key">
+    <button id="load">Load tickets</button>
+  </div>
+  <div class="msg" id="msg" role="alert"></div>
+  <div id="view"></div>
+</main>
+<script>
+const $ = (s) => document.querySelector(s);
+const view = $("#view");
+
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;   // textContent keeps customer text from running as HTML
+  return e;
+}
+function pretty(s) {
+  if (!s) return "";
+  try { return JSON.stringify(JSON.parse(s), null, 2); } catch (e) { return s; }
+}
+async function api(path) {
+  const r = await fetch(path, { headers: { "X-API-Key": $("#key").value.trim() } });
+  if (r.status === 401) throw new Error("Invalid API key.");
+  if (!r.ok) throw new Error("Request failed (" + r.status + ").");
+  return r.json();
+}
+function badge(status) { return el("span", "badge " + status, status.replace("_", " ")); }
+const money = (n) => "$" + Number(n).toFixed(5);
+
+async function showList() {
+  const tickets = await api("/v1/tickets");
+  view.replaceChildren();
+  if (!tickets.length) { view.append(el("p", "", "No tickets yet. Send a message to POST /v1/messages.")); return; }
+  const wrap = el("div", "wrap"), table = el("table");
+  const head = el("tr");
+  ["#", "Customer message", "Outcome", "Steps", "Cost", "Time"].forEach((h) => head.append(el("th", "", h)));
+  table.append(head);
+  tickets.forEach((t) => {
+    const row = el("tr");
+    const idCell = el("td"), a = el("a", "", "#" + t.id);
+    a.href = "#ticket-" + t.id; idCell.append(a);
+    const st = el("td"); st.append(badge(t.status));
+    row.append(idCell, el("td", "", t.customer_message), st,
+      el("td", "", t.steps_used), el("td", "", money(t.cost_usd)), el("td", "", t.duration_ms + " ms"));
+    table.append(row);
+  });
+  wrap.append(table); view.append(wrap);
+}
+
+async function showTicket(id) {
+  const t = await api("/v1/tickets/" + id);
+  view.replaceChildren();
+  const back = el("a", "", "All tickets"); back.href = "#";
+  view.append(back, el("h2", "", "Ticket #" + t.id));
+
+  const card = el("div", "card");
+  card.append(el("div", "lbl", "Customer said"), el("div", "", t.customer_message));
+  card.append(el("div", "lbl", "Agent replied"), el("div", "", t.final_reply || "(no reply)"));
+  const facts = el("div", "facts");
+  facts.style.marginTop = "10px";
+  const st = el("span"); st.append(badge(t.status));
+  facts.append(st, el("span", "", "Steps: " + t.steps_used), el("span", "", "Cost: " + money(t.cost_usd)),
+    el("span", "", "Time: " + t.duration_ms + " ms"));
+  card.append(facts);
+  if (t.handoff_reason) card.append(el("div", "lbl", "Handoff reason: " + t.handoff_reason));
+  if (t.subject) card.append(el("div", "lbl", "Ticket: " + t.subject + " (" + t.priority + " priority)"));
+  view.append(card, el("h2", "", "What the agent did"));
+
+  t.steps.forEach((s) => {
+    const box = el("div", "step " + s.kind);
+    const head = el("div", "head");
+    const title = s.kind === "tool" ? "Tool: " + s.name : s.kind === "model" ? "Model call (" + s.name + ")" : "Error: " + s.name;
+    head.append(el("span", "", title),
+      el("span", "meta", s.duration_ms + " ms" + (s.cost_usd ? " | " + money(s.cost_usd) : "")));
+    box.append(head);
+    if (s.input) { box.append(el("div", "lbl", "Input")); box.append(el("pre", "", pretty(s.input))); }
+    if (s.output) { box.append(el("div", "lbl", "Output")); box.append(el("pre", "", pretty(s.output))); }
+    view.append(box);
+  });
+}
+
+async function route() {
+  $("#msg").textContent = "";
+  if (!$("#key").value.trim()) return;
+  try {
+    const m = location.hash.match(/^#ticket-(\d+)$/);
+    await (m ? showTicket(m[1]) : showList());
+  } catch (e) { $("#msg").textContent = e.message; }
+}
+
+try { $("#key").value = sessionStorage.getItem("apiKey") || ""; } catch (e) {}
+$("#load").addEventListener("click", () => {
+  try { sessionStorage.setItem("apiKey", $("#key").value.trim()); } catch (e) {}
+  route();
+});
+window.addEventListener("hashchange", route);
+route();
+</script>
+</body>
+</html>

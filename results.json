@@ -1,0 +1,339 @@
+{
+  "handled_correctly": 30,
+  "total": 30,
+  "total_cost_usd": 0.0065,
+  "avg_duration_ms": 3170,
+  "cases": [
+    {
+      "message": "Where is my order ORD-1001?",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [
+        "lookup_order"
+      ],
+      "problems": [],
+      "cost_usd": 0.000209,
+      "duration_ms": 4911
+    },
+    {
+      "message": "Can you track order ORD-1007? It is very late.",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [
+        "lookup_order"
+      ],
+      "problems": [],
+      "cost_usd": 0.000228,
+      "duration_ms": 3682
+    },
+    {
+      "message": "status of ord-1003 please",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [
+        "lookup_order"
+      ],
+      "problems": [],
+      "cost_usd": 0.0002,
+      "duration_ms": 3101
+    },
+    {
+      "message": "Has ORD-1002 been delivered yet?",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [
+        "lookup_order"
+      ],
+      "problems": [],
+      "cost_usd": 0.000203,
+      "duration_ms": 2519
+    },
+    {
+      "message": "What is in my order ORD-1008?",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [
+        "lookup_order"
+      ],
+      "problems": [],
+      "cost_usd": 0.000212,
+      "duration_ms": 3397
+    },
+    {
+      "message": "Where is my order?",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [],
+      "problems": [],
+      "cost_usd": 8.2e-05,
+      "duration_ms": 1433
+    },
+    {
+      "message": "Hi, I need help with my order.",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [],
+      "problems": [],
+      "cost_usd": 8.4e-05,
+      "duration_ms": 1051
+    },
+    {
+      "message": "Can you check order ORD-9999 for me?",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [
+        "lookup_order"
+      ],
+      "problems": [],
+      "cost_usd": 0.000188,
+      "duration_ms": 2648
+    },
+    {
+      "message": "Is ORD-1005 still coming?",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [
+        "lookup_order"
+      ],
+      "problems": [],
+      "cost_usd": 0.000197,
+      "duration_ms": 4370
+    },
+    {
+      "message": "When will ORD-1001 arrive?",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [
+        "lookup_order"
+      ],
+      "problems": [],
+      "cost_usd": 0.000201,
+      "duration_ms": 3005
+    },
+    {
+      "message": "I want a refund for ORD-1002, the keyboard is not what I expected.",
+      "passed": true,
+      "status": "ticket_created",
+      "tools_used": [
+        "check_refund_policy",
+        "create_ticket"
+      ],
+      "problems": [],
+      "cost_usd": 0.000341,
+      "duration_ms": 4965
+    },
+    {
+      "message": "Please refund order ORD-1008.",
+      "passed": true,
+      "status": "ticket_created",
+      "tools_used": [
+        "check_refund_policy",
+        "create_ticket"
+      ],
+      "problems": [],
+      "cost_usd": 0.000341,
+      "duration_ms": 3905
+    },
+    {
+      "message": "Refund ORD-1003, I changed my mind.",
+      "passed": true,
+      "status": "ticket_created",
+      "tools_used": [
+        "check_refund_policy",
+        "create_ticket"
+      ],
+      "problems": [],
+      "cost_usd": 0.000339,
+      "duration_ms": 3990
+    },
+    {
+      "message": "I would like my money back for ORD-1002.",
+      "passed": true,
+      "status": "ticket_created",
+      "tools_used": [
+        "check_refund_policy",
+        "create_ticket"
+      ],
+      "problems": [],
+      "cost_usd": 0.000342,
+      "duration_ms": 5418
+    },
+    {
+      "message": "I want to return ORD-1008 and get a refund.",
+      "passed": true,
+      "status": "ticket_created",
+      "tools_used": [
+        "check_refund_policy",
+        "create_ticket"
+      ],
+      "problems": [],
+      "cost_usd": 0.000339,
+      "duration_ms": 3880
+    },
+    {
+      "message": "I want a refund for ORD-1004.",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [
+        "check_refund_policy"
+      ],
+      "problems": [],
+      "cost_usd": 0.000215,
+      "duration_ms": 4271
+    },
+    {
+      "message": "Refund my software license, order ORD-1006.",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [
+        "check_refund_policy"
+      ],
+      "problems": [],
+      "cost_usd": 0.000201,
+      "duration_ms": 2231
+    },
+    {
+      "message": "Can I get a refund on ORD-1005?",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [
+        "check_refund_policy"
+      ],
+      "problems": [],
+      "cost_usd": 0.000203,
+      "duration_ms": 2064
+    },
+    {
+      "message": "I want a refund for ORD-1001.",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [
+        "check_refund_policy"
+      ],
+      "problems": [],
+      "cost_usd": 0.00021,
+      "duration_ms": 3639
+    },
+    {
+      "message": "What is your refund policy?",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [
+        "check_refund_policy"
+      ],
+      "problems": [],
+      "cost_usd": 0.000213,
+      "duration_ms": 2620
+    },
+    {
+      "message": "How many days do I have to return something?",
+      "passed": true,
+      "status": "resolved",
+      "tools_used": [
+        "check_refund_policy"
+      ],
+      "problems": [],
+      "cost_usd": 0.000204,
+      "duration_ms": 2283
+    },
+    {
+      "message": "My headphones from ORD-1008 arrived with a cracked ear cup. I need a replacement.",
+      "passed": true,
+      "status": "ticket_created",
+      "tools_used": [
+        "create_ticket"
+      ],
+      "problems": [],
+      "cost_usd": 0.000214,
+      "duration_ms": 3268
+    },
+    {
+      "message": "The website crashes every time I try to pay. Please report this.",
+      "passed": true,
+      "status": "ticket_created",
+      "tools_used": [
+        "create_ticket"
+      ],
+      "problems": [],
+      "cost_usd": 0.000201,
+      "duration_ms": 3257
+    },
+    {
+      "message": "ORD-1007 is two weeks late. Please open a ticket for this.",
+      "passed": true,
+      "status": "ticket_created",
+      "tools_used": [
+        "create_ticket"
+      ],
+      "problems": [],
+      "cost_usd": 0.000201,
+      "duration_ms": 3796
+    },
+    {
+      "message": "Please change the delivery address on ORD-1003 to 12 Baker Street.",
+      "passed": true,
+      "status": "ticket_created",
+      "tools_used": [
+        "create_ticket"
+      ],
+      "problems": [],
+      "cost_usd": 0.000209,
+      "duration_ms": 2679
+    },
+    {
+      "message": "I am going to sue your company if this is not fixed today.",
+      "passed": true,
+      "status": "handed_off",
+      "tools_used": [
+        "handoff_to_human"
+      ],
+      "problems": [],
+      "cost_usd": 0.000184,
+      "duration_ms": 2792
+    },
+    {
+      "message": "Let me talk to a real person right now.",
+      "passed": true,
+      "status": "handed_off",
+      "tools_used": [
+        "handoff_to_human"
+      ],
+      "problems": [],
+      "cost_usd": 0.000186,
+      "duration_ms": 2107
+    },
+    {
+      "message": "Someone hacked my account and used my card to order things.",
+      "passed": true,
+      "status": "handed_off",
+      "tools_used": [
+        "handoff_to_human"
+      ],
+      "problems": [],
+      "cost_usd": 0.000192,
+      "duration_ms": 2300
+    },
+    {
+      "message": "This is the third time you have ignored me. I want a manager.",
+      "passed": true,
+      "status": "handed_off",
+      "tools_used": [
+        "handoff_to_human"
+      ],
+      "problems": [],
+      "cost_usd": 0.000189,
+      "duration_ms": 2902
+    },
+    {
+      "message": "The heater I bought caught fire and burned my table.",
+      "passed": true,
+      "status": "handed_off",
+      "tools_used": [
+        "handoff_to_human"
+      ],
+      "problems": [],
+      "cost_usd": 0.000187,
+      "duration_ms": 2637
+    }
+  ]
+}
